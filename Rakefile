@@ -9,16 +9,10 @@ DATA_SOURCE_PATTERN = %r{^/docs/providers/\w+/d/}
 
 desc "Generate completion files"
 task :completions do
-  threads = get_providers.map do |provider, uri|
-    res_thr = Thread.new { get_terraform_resource_keys(uri, RESOURCE_PATTERN) }
-    dat_thr = Thread.new { get_terraform_resource_keys(uri, DATA_SOURCE_PATTERN) }
-
-    [res_thr, dat_thr]
-  end
-
-  completions = threads.each_with_object(Hash.new { |h,k| h[k] = [] }) do |(res, data), hash|
-    hash[:resources] += res.value
-    hash[:data_sources] += data.value
+  completions = Hash.new { |h,k| h[k] = [] }
+  get_providers.each do |provider, uri|
+    completions[:resources] += get_terraform_resource_keys(uri, RESOURCE_PATTERN)
+    completions[:data_sources] += get_terraform_resource_keys(uri, DATA_SOURCE_PATTERN)
   end
 
   completions[:data_sources] << "external"
@@ -51,7 +45,7 @@ end
 def get_providers
   uri = URI("https://www.terraform.io/docs/providers/index.html")
   html = download_and_parse(uri)
-  html.search("table.table a").map do |a|
+  html.search('li > a[href^="/docs/providers"]').map do |a|
     [a, URI(BASE_URL + a["href"].to_s)]
   end
 end
