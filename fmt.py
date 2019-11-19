@@ -39,7 +39,6 @@ class TerraformFmt(sublime_plugin.TextCommand):
 
       # Something went wrong
       if p.returncode != 0:
-        stderr = '{}: {}'.format(path.basename(self.view.file_name()), stderr)
         self.show_syntax_errors(stderr)
         return None
 
@@ -75,17 +74,20 @@ class TerraformFmt(sublime_plugin.TextCommand):
     return enc
 
 
-  def show_syntax_errors(self, errors):
+  def show_syntax_errors(self, stderr):
+    panel_name = 'terraform_syntax_errors'
+
     window = self.view.window()
-    panel = window.create_output_panel('terraform_syntax_errors')
+    window.destroy_output_panel(panel_name)
+    panel = window.create_output_panel(panel_name)
     panel.set_syntax_file('Packages/Text/Plain text.tmLanguage')
     panel.settings().set('line_numbers', False)
-    panel.settings().set('result_file_regex', '^(.+):\s.+At\s(\d+):(\d+):\s(.*)$')
+    panel.settings().set('result_file_regex', r'^\s*on (.+) line (\d+):')
     panel.settings().set('result_base_dir', path.dirname(self.view.file_name()))
     panel.set_scratch(True)
-    panel.run_command('append', {'characters': errors})
+    panel.run_command('append', {'characters': stderr.replace('<stdin>', path.basename(self.view.file_name()))})
     panel.set_read_only(True)
-    window.run_command('show_panel', { 'panel': 'output.terraform_syntax_errors' })
+    window.run_command('show_panel', { 'panel': 'output.' + panel_name })
 
 
 def is_var_file(view):
