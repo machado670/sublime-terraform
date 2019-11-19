@@ -48,11 +48,14 @@ class TerraformFmt(sublime_plugin.TextCommand):
 
   def popen_terraform_fmt(self):
     cmd = sublime.load_settings('Terraform.sublime-settings').get('terraform_path', 'terraform')
+    cwd = path.dirname(self.view.file_name());
+
     return subprocess.Popen(
       [cmd, 'fmt', '-no-color', '-'],
       stdout=subprocess.PIPE,
       stderr=subprocess.PIPE,
-      stdin=subprocess.PIPE)
+      stdin=subprocess.PIPE,
+      cwd=cwd)
 
 
   def view_content_bytes(self):
