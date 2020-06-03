@@ -95,11 +95,13 @@ contexts:
         - include: main
     - match: '([\w_-]+)\s*(=)\s*'
       comment: Value assignments (left hand side not in double quotes)
+      scope: meta.identifier.terraform
       captures:
         1: variable.assignment.terraform
         2: keyword.operator.terraform
     - match: '(")([\w_-]+)(")\s*(=)\s*'
       comment: Value assignments (left hand side in double quotes)
+      scope: meta.identifier.terraform
       captures:
         1: punctuation.quote.double.terraform
         2: variable.assignment.terraform
@@ -111,6 +113,10 @@ contexts:
         1: entity.name.section.terraform
         2: punctuation.definition.tag.terraform
     - include: strings
+    - match: '\b(var|local|module|data|path|count)\b'
+      scope: keyword.other.terraform
+    - match: '\bnull\b'
+      scope: variable.language.terraform
   strings:
     - match: '"'
       comment: Strings
@@ -168,7 +174,7 @@ contexts:
   variable_reference:
     - match: '\b(self|count|path|var|local)\b\.?'
       captures:
-        1: variable.language.terraform
+        1: keyword.other.terraform
   string_placeholder:
     - match: |-
         (?x)%
