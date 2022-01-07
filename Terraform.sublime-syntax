@@ -136,6 +136,15 @@ contexts:
           scope: punctuation.definition.string.end.terraform
           pop: true
         - include: interpolation
+    - match: <<-(\w+)
+      scope: punctuation.definition.string.begin.terraform
+      comment: Indented heredoc
+      push:
+        - meta_scope: string.heredoc.terraform
+        - match: ^\s*\1
+          scope: punctuation.definition.string.end.terraform
+          pop: true
+        - include: interpolation
   interpolation:
     - match: '\$\{'
       scope: punctuation.section.embed.begin.terraform
