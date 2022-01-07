@@ -115,6 +115,7 @@ contexts:
         1: entity.name.section.terraform
         2: punctuation.definition.tag.terraform
     - include: strings
+    - include: operators
     - match: '\b(var|local|module|data|path|count)\b'
       scope: keyword.other.terraform
     - match: '\bnull\b'
