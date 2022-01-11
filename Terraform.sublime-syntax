@@ -73,20 +73,20 @@ contexts:
         8: punctuation.definition.string.begin.terraform
         9: meta.data-source.name.terraform
         10: punctuation.definition.string.end.terraform
-    - match: '(provider|provisioner|variable|module|atlas)\s+(")([\w-]+)?(")\s*{'
-      scope: entity.name.resource.terraform
+    - match: '((provider|provisioner|variable|module|atlas)\s+(")([\w-]+)?("))\s*{'
       captures:
-        1: storage.type.function.terraform
-        2: string.terraform punctuation.definition.string.begin.terraform
-        3: string.quoted.double.terraform
-        4: string.terraform punctuation.definition.string.end.terraform
-    - match: '(output)\s+(")([-\w\.]+)(")\s*{'
-      scope: entity.name.resource.terraform
+        1: entity.name.resource.terraform
+        2: storage.type.function.terraform
+        3: string.terraform punctuation.definition.string.begin.terraform
+        4: string.quoted.double.terraform
+        5: string.terraform punctuation.definition.string.end.terraform
+    - match: '((output)\s+(")([-\w\.]+)("))\s*{'
       captures:
-        1: storage.type.function.terraform
-        2: string.terraform punctuation.definition.string.begin.terraform
-        3: string.quoted.double.terraform
-        4: string.terraform punctuation.definition.string.end.terraform
+        1: entity.name.resource.terraform
+        2: storage.type.function.terraform
+        3: string.terraform punctuation.definition.string.begin.terraform
+        4: string.quoted.double.terraform
+        5: string.terraform punctuation.definition.string.end.terraform
     - match: ^\s*(locals|terraform)\s*{
       captures:
         1: storage.type.function.terraform
